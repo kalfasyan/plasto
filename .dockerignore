@@ -1,0 +1,6 @@
+.git
+**/node_modules
+web/dist
+backend/tmp
+dist
+pb_data
