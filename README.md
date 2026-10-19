@@ -31,6 +31,13 @@ email and password. Add more people there, in the `users` collection.
   service. Each person turns them on per device; send one from Go with
   `push.ToUser(app, userID, push.Message{Title: "…", URL: "/…"})`. Phones need the
   app on HTTPS.
+- **Scheduled jobs that don't get skipped.** `jobs.MustAdd(app, "digest", "0 7 * * *", fn)`
+  runs on a cron schedule in your time zone (`TZ`). If the server was off when a job
+  was due, it runs once when the server starts again. Every run and its error are
+  listed in the admin UI under the `jobs` collection.
+- **Nightly backups** of the database and uploads at 03:00, keeping the last 7, in
+  `pb_data/backups`. Change the schedule or add S3 storage in the admin UI under
+  Settings > Backups.
 - **An installable app.** It installs to a phone's home screen or a desktop, opens
   offline from its cached shell, and follows the system's light or dark mode.
 
@@ -40,6 +47,7 @@ email and password. Add more people there, in the `users` collection.
 backend/            Go app on PocketBase
   main.go           entry point
   app/              routes, hooks and jobs (start here)
+  jobs/             scheduled jobs with catch-up
   push/             Web Push: keys, subscriptions, sending
   migrations/       database schema as code
 web/                Svelte 5 + Tailwind web app
