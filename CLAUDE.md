@@ -7,7 +7,7 @@ serving a Svelte 5 + Tailwind web app (`web/`). Decisions and the build plan are
 ## Commands
 
 - `make dev`: run the backend (:8090) and the web app (:5173) with live reload
-- `make check` and `make test` must pass before every commit
+- `make check` and `make test` must pass before every commit (Python: `cd workers && uv run pytest`)
 
 ## Conventions
 
@@ -20,6 +20,11 @@ serving a Svelte 5 + Tailwind web app (`web/`). Decisions and the build plan are
   sending runs in the background and never fails the request.
 - Schedule recurring work with `jobs.MustAdd` (`backend/jobs`) in `app.Register`, not
   `app.Cron()` directly, so missed runs catch up and runs are recorded.
+- Heavy work (ML, scraping, LLM calls) goes in a Python worker under `workers/` that uses
+  `plasto_worker.Client`; workers write records, Go hooks react. Allow workers in API rules
+  with `@request.auth.collectionName = "workers"`.
+- Demo code is marked `DEMO` (backend/app/demo.go, its migration, DemoItems.svelte,
+  workers/demo.py).
 - Brand color and icons: `--color-brand-*` in `web/src/app.css`, files in `web/public/icons/`.
 - Keep it simple: no new dependency or service without a clear need.
 

@@ -11,6 +11,7 @@ help: ## Show the commands
 setup: ## Install the Go and web dependencies
 	cd backend && go mod download
 	cd web && npm ci
+	cd workers && uv sync
 
 dev: ## Run the backend and the web app with live reload (open http://localhost:5173)
 	@trap 'kill 0' INT TERM EXIT; \
@@ -22,10 +23,12 @@ check: ## Format, lint and type-check everything
 	cd backend && test -z "$$(gofmt -l .)" || (gofmt -l . && exit 1)
 	cd backend && go vet ./...
 	cd web && npm run lint && npm run check
+	cd workers && uv run ruff check . && uv run ruff format --check .
 
 test: ## Run all tests
 	cd backend && go test ./...
 	cd web && npm test
+	cd workers && uv run pytest -q
 
 build: ## Build one binary with the web app next to it, in ./dist
 	cd web && npm run build
