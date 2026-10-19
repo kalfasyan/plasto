@@ -1,4 +1,5 @@
 import { pb, type User } from './pb';
+import { forgetPush, syncPush } from './push';
 
 // Who is signed in. PocketBase keeps the token in localStorage, so a reload or
 // reopening the app keeps you signed in.
@@ -17,18 +18,21 @@ class Session {
     await pb.collection('users').authWithPassword(email.trim().toLowerCase(), password);
   }
 
-  logout() {
+  /** Signs out, and stops this device's notifications for the user. */
+  async logout() {
+    await forgetPush();
     pb.authStore.clear();
   }
 
   /** Checks the saved token is still valid and refreshes the user's details. */
   async refresh() {
-    if (!pb.authStore.isValid) return this.logout();
+    if (!pb.authStore.isValid) return pb.authStore.clear();
     try {
       await pb.collection('users').authRefresh();
+      await syncPush();
     } catch (err) {
       const status = (err as { status?: number }).status;
-      if (status === 401 || status === 403 || status === 404) this.logout();
+      if (status === 401 || status === 403 || status === 404) pb.authStore.clear();
     }
   }
 }

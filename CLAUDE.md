@@ -16,6 +16,8 @@ serving a Svelte 5 + Tailwind web app (`web/`). Decisions and the build plan are
 - Custom API routes live under `/api/app/`.
 - Access is controlled with collection API rules. Users have a `role` (`owner` or
   `member`); use `@request.auth.role = "owner"` for owner-only actions.
+- Notify people with `push.ToUser` or `push.ToEveryone` (`backend/push`) from hooks;
+  sending runs in the background and never fails the request.
 - Brand color and icons: `--color-brand-*` in `web/src/app.css`, files in `web/public/icons/`.
 - Keep it simple: no new dependency or service without a clear need.
 

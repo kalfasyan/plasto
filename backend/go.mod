@@ -2,7 +2,11 @@ module github.com/kalfasyan/plasto
 
 go 1.27
 
-require github.com/pocketbase/pocketbase v0.40.5
+require (
+	github.com/SherClockHolmes/webpush-go v1.4.0
+	github.com/pocketbase/dbx v1.12.0
+	github.com/pocketbase/pocketbase v0.40.5
+)
 
 require (
 	dario.cat/mergo v1.0.2 // indirect
@@ -32,7 +36,6 @@ require (
 	github.com/ncruces/go-strftime v1.1.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.4.3 // indirect
-	github.com/pocketbase/dbx v1.12.0 // indirect
 	github.com/pocketbase/ozzo-validation/v4 v4.3.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/spf13/afero v1.15.0 // indirect
