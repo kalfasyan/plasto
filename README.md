@@ -18,8 +18,17 @@ make setup   # install dependencies
 make dev     # backend on :8090, web app with live reload on http://localhost:5173
 ```
 
-The first start prints a link that creates your admin account. The admin UI is at
-http://localhost:8090/_/.
+Open the app and create your account: the first person becomes the **owner**
+and can also sign in to the admin UI at http://localhost:8090/_/ with the same
+email and password. Add more people there, in the `users` collection.
+
+## What you get
+
+- **First-run setup and sign-in.** No terminal needed to create the first account.
+- **Users and roles.** The owner manages everyone; members can see each other and
+  edit themselves. Nobody can sign themselves up.
+- **An installable app.** It installs to a phone's home screen or a desktop, opens
+  offline from its cached shell, and follows the system's light or dark mode.
 
 ## Layout
 
@@ -29,8 +38,10 @@ backend/            Go app on PocketBase
   app/              routes, hooks and jobs (start here)
   migrations/       database schema as code
 web/                Svelte 5 + Tailwind web app
-  src/App.svelte    the first screen (start here)
-  src/lib/          shared code and its tests
+  src/App.svelte    picks setup, sign-in or the app
+  src/components/   screens; Home.svelte is where your app starts
+  src/lib/          shared code (API client, session, install) and its tests
+  public/           manifest, service worker and icons
 Dockerfile          one small multi-arch image
 Makefile            run `make` to see every command
 ```

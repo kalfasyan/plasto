@@ -23,6 +23,7 @@ type Config struct {
 func Register(app core.App, cfg Config) {
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.GET("/api/app/info", info)
+		registerSetupRoutes(se)
 
 		// Serve the web app, falling back to index.html for client-side routes.
 		if !se.Router.HasRoute(http.MethodGet, "/{path...}") {
