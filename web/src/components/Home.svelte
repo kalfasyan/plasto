@@ -2,6 +2,7 @@
   import { pb } from '../lib/pb';
   import { install } from '../lib/install.svelte';
   import { session } from '../lib/session.svelte';
+  import DemoItems from './DemoItems.svelte';
   import Notifications from './Notifications.svelte';
 
   const user = $derived(session.user!);
@@ -27,6 +28,8 @@
       Edit <code class="font-mono text-sm">web/src/components/Home.svelte</code> and save.
     </p>
   </section>
+
+  <DemoItems />
 
   {#if install.canPrompt}
     <section class="card flex items-center justify-between gap-4">

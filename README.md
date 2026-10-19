@@ -11,7 +11,8 @@ for why, and for what's coming next.
 
 ## Quick start
 
-You need [Go](https://go.dev/dl/) 1.27+ and [Node](https://nodejs.org) 22+.
+You need [Go](https://go.dev/dl/) 1.27+, [Node](https://nodejs.org) 22+ and
+[uv](https://docs.astral.sh/uv/) (for the Python workers).
 
 ```sh
 make setup   # install dependencies
@@ -38,6 +39,11 @@ email and password. Add more people there, in the `users` collection.
 - **Nightly backups** of the database and uploads at 03:00, keeping the last 7, in
   `pb_data/backups`. Change the schedule or add S3 storage in the admin UI under
   Settings > Backups.
+- **Python workers** for the heavy lifting (ML, scraping, LLMs), on this machine or
+  another. They sign in with a worker account and read and write records through
+  the API; see [workers/README.md](workers/README.md).
+- **A demo** that uses every piece: a live items list on the home screen, a worker
+  that adds to it, and a push notification for each new item.
 - **An installable app.** It installs to a phone's home screen or a desktop, opens
   offline from its cached shell, and follows the system's light or dark mode.
 
@@ -55,6 +61,7 @@ web/                Svelte 5 + Tailwind web app
   src/components/   screens; Home.svelte is where your app starts
   src/lib/          shared code (API client, session, install) and its tests
   public/           manifest, service worker and icons
+workers/            Python worker kit, the demo worker and their tests
 Dockerfile          one small multi-arch image
 Makefile            run `make` to see every command
 ```
