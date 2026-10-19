@@ -69,6 +69,8 @@ jobs:
           for i in $(seq 1 30); do curl -sf localhost:8090/api/health && break; sleep 1; done
           curl -sf localhost:8090/api/app/info | grep -q '"version":"${{ github.sha }}"'
           curl -sf localhost:8090/ | grep -q '<div id="app">'
+          curl -sf localhost:8090/manifest.webmanifest | grep -q '"display": "standalone"'
+          curl -sf localhost:8090/api/app/setup | grep -q '"needed":true'
           docker logs smoke
           docker rm -f smoke
 

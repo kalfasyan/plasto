@@ -14,6 +14,9 @@ serving a Svelte 5 + Tailwind web app (`web/`). Decisions and the build plan are
 - Database collections are defined in Go migrations under `backend/migrations`
   (`go run . migrate create <name>`), never only in the admin UI.
 - Custom API routes live under `/api/app/`.
+- Access is controlled with collection API rules. Users have a `role` (`owner` or
+  `member`); use `@request.auth.role = "owner"` for owner-only actions.
+- Brand color and icons: `--color-brand-*` in `web/src/app.css`, files in `web/public/icons/`.
 - Keep it simple: no new dependency or service without a clear need.
 
 ## Git and GitHub
