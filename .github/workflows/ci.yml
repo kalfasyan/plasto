@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     branches: [main]
+    tags: ['v*']
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -70,32 +71,41 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:
+      # a release tag (v1.2.3) names the version; otherwise the commit does
+      VERSION: ${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
 
-      # Build for this runner only and check that the container starts and serves the app.
-      - name: Build for smoke test
+      # Build both images for this runner and deploy them with the compose file.
+      - name: Build the app for the smoke test
         uses: docker/build-push-action@v6
         with:
           context: .
           load: true
           tags: plasto:smoke
-          build-args: VERSION=${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          build-args: VERSION=${{ env.VERSION }}
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,mode=max,scope=app
+      - name: Build the worker for the smoke test
+        uses: docker/build-push-action@v6
+        with:
+          context: workers
+          load: true
+          tags: plasto-worker:smoke
+          cache-from: type=gha,scope=worker
+          cache-to: type=gha,mode=max,scope=worker
       - name: Smoke test
         run: |
-          docker run -d --name smoke -p 8090:8090 plasto:smoke
-          for i in $(seq 1 30); do curl -sf localhost:8090/api/health && break; sleep 1; done
-          curl -sf localhost:8090/api/app/info | grep -q '"version":"${{ github.sha }}"'
-          curl -sf localhost:8090/ | grep -q '<div id="app">'
-          curl -sf localhost:8090/manifest.webmanifest | grep -q '"display": "standalone"'
-          curl -sf localhost:8090/api/app/setup | grep -q '"needed":true'
-          docker logs smoke
-          docker rm -f smoke
+          docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.tailscale.yml config -q
+          deploy/smoke-test.sh
+        env:
+          PLASTO_IMAGE: plasto:smoke
+          PLASTO_WORKER_IMAGE: plasto-worker:smoke
+          EXPECT_VERSION: ${{ env.VERSION }}
 
-      # On main, publish the image for every platform people run it on.
+      # On main and on release tags, publish both images for every platform people run them on.
       - uses: docker/setup-qemu-action@v3
         if: github.event_name == 'push'
       - uses: docker/login-action@v3
@@ -104,16 +114,37 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish
+      - name: Image tags
+        if: github.event_name == 'push'
+        run: |
+          image=ghcr.io/${GITHUB_REPOSITORY,,}
+          for name in app worker; do
+            [ $name = app ] && base=$image || base=$image-worker
+            if [ "$GITHUB_REF_TYPE" = tag ]; then
+              tags="$base:$GITHUB_REF_NAME"
+            else
+              tags="$base:latest,$base:$GITHUB_SHA"
+            fi
+            echo "${name}_tags=$tags" >> "$GITHUB_ENV"
+          done
+      - name: Publish the app
         if: github.event_name == 'push'
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          build-args: VERSION=${{ github.sha }}
-          tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          build-args: VERSION=${{ env.VERSION }}
+          tags: ${{ env.app_tags }}
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,mode=max,scope=app
+      - name: Publish the worker
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v6
+        with:
+          context: workers
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true
+          tags: ${{ env.worker_tags }}
+          cache-from: type=gha,scope=worker
+          cache-to: type=gha,mode=max,scope=worker

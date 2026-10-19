@@ -25,6 +25,8 @@ serving a Svelte 5 + Tailwind web app (`web/`). Decisions and the build plan are
   with `@request.auth.collectionName = "workers"`.
 - Demo code is marked `DEMO` (backend/app/demo.go, its migration, DemoItems.svelte,
   workers/demo.py).
+- Deploy files are in `deploy/` (see `docs/deploy.md`); `make smoke` runs the images with
+  `deploy/docker-compose.yml` end to end, and CI runs it on every PR.
 - Brand color and icons: `--color-brand-*` in `web/src/app.css`, files in `web/public/icons/`.
 - Keep it simple: no new dependency or service without a clear need.
 

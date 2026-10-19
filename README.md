@@ -47,6 +47,18 @@ email and password. Add more people there, in the `users` collection.
 - **An installable app.** It installs to a phone's home screen or a desktop, opens
   offline from its cached shell, and follows the system's light or dark mode.
 
+## Deploy
+
+On any Linux machine with Docker (a NAS, a Raspberry Pi, a server):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/kalfasyan/plasto/main/deploy/install.sh | sh
+```
+
+It asks for a Tailscale auth key, so your devices reach the app at
+`https://plasto.<your-tailnet>.ts.net`, and starts it with Docker Compose. See
+[docs/deploy.md](docs/deploy.md) for updates, backups, workers, Synology and the Pi.
+
 ## Layout
 
 ```
@@ -61,8 +73,10 @@ web/                Svelte 5 + Tailwind web app
   src/components/   screens; Home.svelte is where your app starts
   src/lib/          shared code (API client, session, install) and its tests
   public/           manifest, service worker and icons
-workers/            Python worker kit, the demo worker and their tests
-Dockerfile          one small multi-arch image
+workers/            Python worker kit, the demo worker, their tests and image
+deploy/             compose files, Tailscale sidecar, install script, smoke test
+docs/               decisions and the deploy guide
+Dockerfile          the app's multi-arch image
 Makefile            run `make` to see every command
 ```
 
@@ -72,11 +86,14 @@ Makefile            run `make` to see every command
 | ------------ | ----------------------------------------------------- |
 | `make dev`   | Run everything with live reload                       |
 | `make check` | Format, lint and type-check                           |
-| `make test`  | Run the Go and web tests                              |
+| `make test`  | Run the Go, web and worker tests                      |
 | `make build` | Build `dist/plasto` with the web app next to it       |
 | `make run`   | Build the Docker image and run it on :8090            |
+| `make smoke` | Deploy both images with Compose and test end to end   |
 
-Pushes to `main` publish `ghcr.io/kalfasyan/plasto` for amd64, arm64 and armv7.
+Pushes to `main` publish `ghcr.io/kalfasyan/plasto` and
+`ghcr.io/kalfasyan/plasto-worker` for amd64, arm64 and armv7; a `v*` tag
+publishes that version.
 
 ## License
 
