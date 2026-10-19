@@ -2,6 +2,7 @@
   import { pb } from '../lib/pb';
   import { install } from '../lib/install.svelte';
   import { session } from '../lib/session.svelte';
+  import Notifications from './Notifications.svelte';
 
   const user = $derived(session.user!);
   const version = pb
@@ -37,6 +38,8 @@
       <p>To install this app, tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>.</p>
     </section>
   {/if}
+
+  <Notifications />
 
   <section class="card text-sm text-zinc-600 dark:text-zinc-400">
     Signed in as {user.email}{session.isOwner ? ' (owner)' : ''}.

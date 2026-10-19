@@ -8,6 +8,8 @@ import (
 
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
+
+	"github.com/kalfasyan/plasto/push"
 )
 
 // Version is set at build time with -ldflags "-X github.com/kalfasyan/plasto/app.Version=...".
@@ -24,6 +26,7 @@ func Register(app core.App, cfg Config) {
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.GET("/api/app/info", info)
 		registerSetupRoutes(se)
+		push.RegisterRoutes(se)
 
 		// Serve the web app, falling back to index.html for client-side routes.
 		if !se.Router.HasRoute(http.MethodGet, "/{path...}") {

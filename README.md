@@ -27,6 +27,10 @@ email and password. Add more people there, in the `users` collection.
 - **First-run setup and sign-in.** No terminal needed to create the first account.
 - **Users and roles.** The owner manages everyone; members can see each other and
   edit themselves. Nobody can sign themselves up.
+- **Push notifications** straight from your server, with no account or third-party
+  service. Each person turns them on per device; send one from Go with
+  `push.ToUser(app, userID, push.Message{Title: "…", URL: "/…"})`. Phones need the
+  app on HTTPS.
 - **An installable app.** It installs to a phone's home screen or a desktop, opens
   offline from its cached shell, and follows the system's light or dark mode.
 
@@ -36,6 +40,7 @@ email and password. Add more people there, in the `users` collection.
 backend/            Go app on PocketBase
   main.go           entry point
   app/              routes, hooks and jobs (start here)
+  push/             Web Push: keys, subscriptions, sending
   migrations/       database schema as code
 web/                Svelte 5 + Tailwind web app
   src/App.svelte    picks setup, sign-in or the app
