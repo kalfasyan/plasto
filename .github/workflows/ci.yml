@@ -56,7 +56,7 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: workers/uv.lock
-      # the tests build the backend and run the worker kit and the demo worker against it
+      # the tests build the backend and run the worker kit and the workers against it
       - name: Lint and test
         working-directory: workers
         run: |
@@ -64,6 +64,35 @@ jobs:
           uv run ruff check .
           uv run ruff format --check .
           uv run pytest -q
+
+  # TEMPLATE start (rename.sh removes this job from new apps)
+  # Makes an app from the template the way a person would, then checks and tests it.
+  template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: astral-sh/setup-uv@v6
+      - name: Rename, strip the demo, check and test
+        run: |
+          git remote set-url origin https://github.com/example/door-bell.git
+          scripts/rename.sh
+          scripts/strip-demo.sh
+          if git grep -n -i plasto | grep -v -e plasto_worker -e 'built on'; then
+            echo "rename.sh missed the lines above"
+            exit 1
+          fi
+          make setup check test
+          cd web && npm run build
+  # TEMPLATE end
 
   image:
     needs: [backend, web, workers]

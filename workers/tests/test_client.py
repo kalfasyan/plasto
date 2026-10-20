@@ -9,15 +9,14 @@ from plasto_worker.client import _sse
 def test_records(server, worker):
     name, password = worker
     with Client(server, name, password) as app:
-        item = app.create("items", {"title": "From a test"})
-        assert item["by"] == name
-        assert app.get("items", item["id"])["title"] == "From a test"
-        assert any(i["id"] == item["id"] for i in app.list("items", filter='title ~ "test"'))
+        item = app.create("notes", {"title": "From a test"})
+        assert app.get("notes", item["id"])["title"] == "From a test"
+        assert any(i["id"] == item["id"] for i in app.list("notes", filter='title ~ "test"'))
 
 
 def test_errors_carry_the_server_message(server, worker):
     with Client(server, *worker) as app, pytest.raises(ApiError) as err:
-        app.create("items", {})
+        app.create("notes", {})
     assert err.value.status == 400
 
 
@@ -32,7 +31,7 @@ def test_heartbeat_sets_last_seen(server, admin, worker):
 def test_a_rotated_password_signs_in_again(server, admin, worker):
     name, password = worker
     app = Client(server, name, password)
-    app.list("items")
+    app.list("notes")
     wid = admin.get("/api/collections/workers/records", params={"filter": f'name = "{name}"'})
     wid = wid.json()["items"][0]["id"]
     new = "rotated-password-2"
@@ -41,7 +40,7 @@ def test_a_rotated_password_signs_in_again(server, admin, worker):
     ).raise_for_status()
 
     app.password = new  # the worker restarted with the new password
-    app.list("items")
+    app.list("notes")
 
 
 def test_a_revoked_worker_is_refused(server, admin, worker):
@@ -49,7 +48,7 @@ def test_a_revoked_worker_is_refused(server, admin, worker):
     wid = admin.get("/api/collections/workers/records", params={"filter": f'name = "{name}"'})
     admin.delete(f"/api/collections/workers/records/{wid.json()['items'][0]['id']}")
     with Client(server, name, password) as app, pytest.raises(ApiError) as err:
-        app.list("items")
+        app.list("notes")
     assert err.value.status == 400
 
 
@@ -62,12 +61,12 @@ def test_subscribe_sees_new_records(server, worker):
         got.set()
 
     listener = Client(server, *worker)
-    threading.Thread(target=listener.subscribe, args=("items", handler), daemon=True).start()
+    threading.Thread(target=listener.subscribe, args=("notes", handler), daemon=True).start()
 
     with Client(server, *worker) as app:
         # keep adding until the listener is connected and sees one
         for i in range(50):
-            app.create("items", {"title": f"live {i}"})
+            app.create("notes", {"title": f"live {i}"})
             if got.wait(0.2):
                 break
     assert seen and seen[0][0] == "create" and seen[0][1].startswith("live")

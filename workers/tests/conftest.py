@@ -60,6 +60,16 @@ def admin(server):
     )
     res.raise_for_status()
     with httpx.Client(base_url=server, headers={"Authorization": res.json()["token"]}) as c:
+        # a collection of the tests' own, so they don't depend on the app's
+        workers = '@request.auth.collectionName = "workers"'
+        c.post(
+            "/api/collections",
+            json={
+                "name": "notes",
+                "fields": [{"name": "title", "type": "text", "required": True}],
+                **{f"{r}Rule": workers for r in ("list", "view", "create", "update", "delete")},
+            },
+        ).raise_for_status()
         yield c
 
 

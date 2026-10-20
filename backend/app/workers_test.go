@@ -59,41 +59,12 @@ func TestWorkers(t *testing.T) {
 			name: "workers can't list workers", as: "worker", method: http.MethodGet,
 			url: "/api/collections/workers/records", status: http.StatusForbidden, content: "Only superusers",
 		},
-		{
-			name: "items record which worker added them", as: "worker", method: http.MethodPost,
-			url: "/api/collections/items/records", body: `{"title":"Front door: person","by":"forged"}`,
-			status: http.StatusOK, content: `"by":"camera"`,
-		},
-		{
-			name: "items record which person added them", as: "member", method: http.MethodPost,
-			url: "/api/collections/items/records", body: `{"title":"Milk"}`,
-			status: http.StatusOK, content: `"by":"member"`,
-		},
-		{
-			name: "signed-out visitors can't add items", method: http.MethodPost,
-			url: "/api/collections/items/records", body: `{"title":"Spam"}`,
-			status: http.StatusBadRequest, content: `"status":400`,
-		},
-		{
-			name: "workers can't delete items", as: "worker", method: http.MethodDelete,
-			url: "/api/collections/items/records/{item}", status: http.StatusNotFound, content: `"status":404`,
-		},
-		{
-			name: "people can delete items", as: "member", method: http.MethodDelete,
-			url: "/api/collections/items/records/{item}", status: http.StatusNoContent,
-		},
 	}
 
 	for _, c := range cases {
 		a := newApp(t)
 		_, memberToken := addUser(t, a, "member@example.com", "member")
 		_, workerToken := addWorker(t, a, "camera")
-		itemsCol, _ := a.FindCollectionByNameOrId("items")
-		item := core.NewRecord(itemsCol)
-		item.Set("title", "Existing")
-		if err := a.Save(item); err != nil {
-			t.Fatal(err)
-		}
 
 		headers := map[string]string{}
 		switch c.as {
@@ -105,7 +76,7 @@ func TestWorkers(t *testing.T) {
 		s := tests.ApiScenario{
 			Name:           c.name,
 			Method:         c.method,
-			URL:            strings.ReplaceAll(c.url, "{item}", item.Id),
+			URL:            c.url,
 			Body:           strings.NewReader(c.body),
 			Headers:        headers,
 			ExpectedStatus: c.status,

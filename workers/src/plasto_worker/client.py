@@ -44,11 +44,15 @@ class Client:
         retries: int = 5,
         timeout: float = 30,
     ):
-        self.url = (url or os.environ.get("PLASTO_URL") or "http://127.0.0.1:8090").rstrip("/")
-        self.name = name or os.environ.get("PLASTO_WORKER", "")
-        self.password = password or os.environ.get("PLASTO_WORKER_PASSWORD", "")
+        env = os.environ.get
+        self.url = (url or env("PLASTO_URL") or "http://127.0.0.1:8090").rstrip("/")
+        self.name = name or env("PLASTO_WORKER", "")
+        self.password = password or env("PLASTO_WORKER_PASSWORD", "")
         if not self.name or not self.password:
-            raise ValueError("Set PLASTO_WORKER and PLASTO_WORKER_PASSWORD (a worker account).")
+            raise ValueError(
+                "Set PLASTO_WORKER and PLASTO_WORKER_PASSWORD to a worker account's name "
+                "and password."
+            )
         self.retries = retries
         self._http = httpx.Client(base_url=self.url, timeout=timeout)
         self._token = ""

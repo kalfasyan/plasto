@@ -84,9 +84,9 @@ there.
    `COMPOSE_PROFILES=worker`.
 3. Run `docker compose up -d`.
 
-It runs the demo worker. To run your own, set its command in
-`docker-compose.yml`, for example `command: python camera.py`. Every `.py` file in
-`workers/` and every dependency you add with `uv add` is in the worker image.
+It runs `workers/worker.py`, the starting point for your own worker. To run another
+one, set `PLASTO_WORKER_SCRIPT` in `.env`, for example to `camera.py`. Every `.py`
+file in `workers/` and every dependency you add with `uv add` is in the worker image.
 
 ### On another machine
 
@@ -140,5 +140,5 @@ Large services such as Frigate run as their own containers next to the worker.
 ## Check a deploy
 
 `make smoke` builds both images, deploys them with `docker-compose.yml` in a
-scratch folder, signs up an owner, runs one round of the demo worker and checks
-that its item arrived. CI runs the same script on every pull request.
+scratch folder, signs up an owner, runs one round of the worker and checks that
+it reported in. CI runs the same script on every pull request.

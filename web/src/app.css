@@ -15,10 +15,17 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  input {
+  input:not([type='checkbox'], [type='radio']),
+  select,
+  textarea {
     @apply w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-base outline-none;
     @apply focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30;
     @apply dark:border-zinc-700 dark:bg-zinc-900;
+  }
+
+  input[type='checkbox'],
+  input[type='radio'] {
+    @apply size-5 accent-brand-600;
   }
 
   label {

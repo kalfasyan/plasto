@@ -1,3 +1,5 @@
+"""DEMO: tests for demo.py. scripts/strip-demo.sh removes them."""
+
 import demo
 from plasto_worker import Client
 
