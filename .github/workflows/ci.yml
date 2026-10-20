@@ -106,7 +106,7 @@ jobs:
           EXPECT_VERSION: ${{ env.VERSION }}
 
       # On main and on release tags, publish both images for every platform people run them on.
-      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-qemu-action@v4
         if: github.event_name == 'push'
       - uses: docker/login-action@v3
         if: github.event_name == 'push'
