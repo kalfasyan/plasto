@@ -7,7 +7,18 @@ hardware.
 It is built on [PocketBase](https://pocketbase.io) (Go, SQLite, auth, realtime,
 admin UI) and [Svelte 5](https://svelte.dev) with
 [Tailwind](https://tailwindcss.com). See [docs/decisions.md](docs/decisions.md)
-for why, and for what's coming next.
+for why.
+
+<!-- TEMPLATE start (rename.sh removes this section from new apps) -->
+## Start a new app
+
+1. On GitHub, click **Use this template** and create your app's repository.
+2. Clone it and run `scripts/rename.sh`: plasto becomes your repository's name in
+   the code, images, env vars and docs.
+3. Run `scripts/strip-demo.sh` to remove the demo, or keep it as a reference for now.
+4. Follow [Build your first feature](docs/first-feature.md).
+
+<!-- TEMPLATE end -->
 
 ## Quick start
 
@@ -42,8 +53,11 @@ email and password. Add more people there, in the `users` collection.
 - **Python workers** for the heavy lifting (ML, scraping, LLMs), on this machine or
   another. They sign in with a worker account and read and write records through
   the API; see [workers/README.md](workers/README.md).
+<!-- DEMO start -->
 - **A demo** that uses every piece: a live items list on the home screen, a worker
   that adds to it, and a push notification for each new item.
+  `scripts/strip-demo.sh` removes it.
+<!-- DEMO end -->
 - **An installable app.** It installs to a phone's home screen or a desktop, opens
   offline from its cached shell, and follows the system's light or dark mode.
 
@@ -73,7 +87,7 @@ web/                Svelte 5 + Tailwind web app
   src/components/   screens; Home.svelte is where your app starts
   src/lib/          shared code (API client, session, install) and its tests
   public/           manifest, service worker and icons
-workers/            Python worker kit, the demo worker, their tests and image
+workers/            Python worker kit, your workers, their tests and image
 deploy/             compose files, Tailscale sidecar, install script, smoke test
 docs/               decisions and the deploy guide
 Dockerfile          the app's multi-arch image

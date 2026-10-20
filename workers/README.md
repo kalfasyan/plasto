@@ -15,6 +15,8 @@ and restart the worker. To revoke a worker, delete its record.
 
 ## 2. Write the worker
 
+Start from `worker.py`, or add a file next to it:
+
 ```python
 from plasto_worker import Client, every
 
@@ -52,11 +54,15 @@ You need [uv](https://docs.astral.sh/uv/).
 
 ```sh
 cd workers
-PLASTO_URL=http://localhost:8090 PLASTO_WORKER=demo PLASTO_WORKER_PASSWORD=... uv run python demo.py
+PLASTO_URL=http://localhost:8090 PLASTO_WORKER=... PLASTO_WORKER_PASSWORD=... uv run python worker.py
 ```
 
+Add `--once` for a single round.
+
+<!-- DEMO start -->
 `demo.py` adds an item to the demo list every five minutes; the app shows it
-live and sends everyone else a push notification. Add `--once` for a single round.
+live and sends everyone else a push notification.
+<!-- DEMO end -->
 
 ## Tests
 

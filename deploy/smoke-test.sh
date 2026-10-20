@@ -1,7 +1,7 @@
 #!/bin/sh
-# End-to-end check of a deploy: starts the app and the demo worker with
+# End-to-end check of a deploy: starts the app and a worker with
 # docker-compose.yml in a scratch folder, signs up the owner, creates a worker
-# account, runs one worker round and checks that its item arrived.
+# account, runs one worker round and checks that the worker reported in.
 #
 #   PLASTO_IMAGE=plasto:dev PLASTO_WORKER_IMAGE=plasto-worker:dev deploy/smoke-test.sh
 #
@@ -61,14 +61,14 @@ token=$(curl -sf -H 'Content-Type: application/json' \
 	sed -n 's/.*"token":"\([^"]*\)".*/\1/p')
 [ -n "$token" ] || fail "the owner cannot sign in to the admin UI"
 
-step "Creating a worker account and running one round of the demo worker"
+step "Creating a worker account and running one round of the worker"
 curl -sf -H "Authorization: $token" -H 'Content-Type: application/json' \
 	"$url/api/collections/workers/records" \
 	-d '{"name":"smoke","password":"smoke-worker-pw","passwordConfirm":"smoke-worker-pw"}' >/dev/null ||
 	fail "could not create the worker account"
-docker compose run --rm worker python demo.py --once
+docker compose run --rm worker python worker.py --once
 
-curl -sf -H "Authorization: $token" "$url/api/collections/items/records" |
-	grep -q 'Hello from the demo worker' || fail "the worker's item is missing"
+curl -sf -H "Authorization: $token" "$url/api/collections/workers/records" |
+	grep -q '"last_seen":"2' || fail "the worker did not report in"
 
 echo "OK"

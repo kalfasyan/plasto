@@ -18,10 +18,11 @@ services:
       PLASTO_PUSH_CONTACT: ${PLASTO_PUSH_CONTACT:-}
     mem_limit: 512m
 
-  # The demo worker by default; set the command to run one of your own.
+  # Runs one of the workers in workers/, PLASTO_WORKER_SCRIPT (worker.py by default).
   # Enabled with COMPOSE_PROFILES=worker in .env.
   worker:
     image: ${PLASTO_WORKER_IMAGE:-ghcr.io/kalfasyan/plasto-worker:latest}
+    command: [python, "${PLASTO_WORKER_SCRIPT:-worker.py}"]
     profiles: [worker]
     restart: unless-stopped
     depends_on: [app]

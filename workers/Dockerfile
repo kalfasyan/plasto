@@ -1,5 +1,5 @@
 # The worker image: the plasto_worker kit, its locked dependencies and the
-# workers in this folder. It runs demo.py unless you give it another command:
+# workers in this folder. It runs worker.py unless you give it another command:
 #   docker run ... ghcr.io/kalfasyan/plasto-worker python my_worker.py
 
 # --- build: resolve the locked dependencies and build the kit's wheel ---
@@ -22,4 +22,4 @@ RUN pip install --no-cache-dir -r /tmp/build/requirements.txt \
 WORKDIR /app
 COPY --chown=app:app *.py ./
 USER app
-CMD ["python", "demo.py"]
+CMD ["python", "worker.py"]
