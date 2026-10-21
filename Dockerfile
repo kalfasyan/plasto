@@ -2,7 +2,7 @@
 # so ARM images build as fast as the x86-64 one.
 
 # --- web app ---
-FROM --platform=$BUILDPLATFORM node:22-alpine AS web
+FROM --platform=$BUILDPLATFORM node:26-alpine AS web
 WORKDIR /web
 COPY web/package.json web/package-lock.json ./
 RUN npm ci

@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 26
           cache: npm
           cache-dependency-path: web/package-lock.json
       - name: Lint, check, test and build
@@ -77,7 +77,7 @@ jobs:
           cache-dependency-path: backend/go.sum
       - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 26
           cache: npm
           cache-dependency-path: web/package-lock.json
       - uses: astral-sh/setup-uv@v6
