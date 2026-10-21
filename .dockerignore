@@ -4,3 +4,4 @@ web/dist
 backend/tmp
 dist
 pb_data
+workers/.venv

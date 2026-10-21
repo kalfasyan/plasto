@@ -14,3 +14,9 @@ pb_data/
 .DS_Store
 .idea/
 .vscode/
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/

@@ -5,9 +5,12 @@ package app
 import (
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
+
+	"github.com/kalfasyan/plasto/push"
 )
 
 // Version is set at build time with -ldflags "-X github.com/kalfasyan/plasto/app.Version=...".
@@ -21,8 +24,16 @@ type Config struct {
 
 // Register adds the app's routes and hooks to a PocketBase instance.
 func Register(app core.App, cfg Config) {
+	// scheduled jobs and backups follow the server's time zone (TZ)
+	app.Cron().SetTimezone(time.Local)
+
+	registerDemo(app) // DEMO
+
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.GET("/api/app/info", info)
+		registerSetupRoutes(se)
+		registerWorkerRoutes(se)
+		push.RegisterRoutes(se)
 
 		// Serve the web app, falling back to index.html for client-side routes.
 		if !se.Router.HasRoute(http.MethodGet, "/{path...}") {
