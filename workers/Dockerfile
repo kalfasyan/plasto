@@ -3,7 +3,7 @@
 #   docker run ... ghcr.io/kalfasyan/plasto-worker python my_worker.py
 
 # --- build: resolve the locked dependencies and build the kit's wheel ---
-FROM --platform=$BUILDPLATFORM python:3.13-slim AS build
+FROM --platform=$BUILDPLATFORM python:3.15-slim AS build
 RUN pip install --no-cache-dir uv==0.11.32
 WORKDIR /src
 COPY pyproject.toml uv.lock README.md ./
@@ -12,7 +12,7 @@ RUN uv export --locked --no-dev --no-emit-project -o requirements.txt \
     && uv build --wheel -o dist
 
 # --- runtime ---
-FROM python:3.13-slim
+FROM python:3.15-slim
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 COPY --from=build /src/requirements.txt /src/dist/ /tmp/build/
 RUN pip install --no-cache-dir -r /tmp/build/requirements.txt \
