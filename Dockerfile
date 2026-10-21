@@ -20,7 +20,7 @@ RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH GOARM=${TARGETVARIANT#v} \
     go build -trimpath -ldflags="-s -w -X github.com/kalfasyan/plasto/app.Version=$VERSION" -o /plasto .
 
 # --- runtime ---
-FROM alpine:3.22
+FROM alpine:3.24
 RUN apk add --no-cache ca-certificates tzdata \
     && adduser -D -u 1000 app \
     && mkdir -p /app/pb_data && chown app:app /app/pb_data
