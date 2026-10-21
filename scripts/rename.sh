@@ -32,6 +32,7 @@ self=scripts/rename.sh
 echo "Renaming plasto to $name ($repo, env vars ${prefix}_*)"
 
 git rm -q docs/decisions.md
+git rm -rq docs/images  # the template's README screenshots
 
 # -I skips binary files
 git grep -l -I -i -e plasto -- . ":(exclude)$self" ":(exclude)scripts/strip-demo.sh" |
