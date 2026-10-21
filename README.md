@@ -1,8 +1,33 @@
+<div align="center">
+
+<img src="web/public/icons/icon.svg" width="88" alt="">
+
 # plasto
 
-A template for small self-hosted apps. It takes you from an idea to a
-phone-friendly web app, an API and a database in one container on your own
-hardware.
+**A template for self-hosted apps: from an idea to an app on your phone,<br>
+running in one small container on your own hardware.**
+
+[![CI](https://github.com/kalfasyan/plasto/actions/workflows/ci.yml/badge.svg)](https://github.com/kalfasyan/plasto/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/kalfasyan/plasto)](LICENSE)
+[![Go](https://img.shields.io/github/go-mod/go-version/kalfasyan/plasto?filename=backend%2Fgo.mod&logo=go&logoColor=white)](backend/go.mod)
+[![PocketBase](https://img.shields.io/badge/PocketBase-0.40-b8dbe4?logo=pocketbase&logoColor=black)](https://pocketbase.io)
+[![Svelte 5](https://img.shields.io/badge/Svelte-5-ff3e00?logo=svelte&logoColor=white)](https://svelte.dev)
+[![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Python workers](https://img.shields.io/badge/workers-Python_3.12+-3776ab?logo=python&logoColor=white)](workers/README.md)
+[![Docker images](https://img.shields.io/badge/ghcr.io-amd64_%7C_arm64_%7C_armv7-2496ed?logo=docker&logoColor=white)](https://github.com/kalfasyan?tab=packages&repo_name=plasto)
+
+[![Use this template](https://img.shields.io/badge/Use_this_template-2ea44f?style=for-the-badge&logo=github)](https://github.com/kalfasyan/plasto/generate)
+[![Buy me a coffee](https://img.shields.io/badge/Buy_me_a_coffee-ffdd00?style=for-the-badge&logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/kalfasyan)
+
+<img src="docs/images/setup.png" width="230" alt="The first-run screen, where the first person creates the owner account">&nbsp;
+<img src="docs/images/home-light.png" width="230" alt="The home screen with the live demo list, in light mode">&nbsp;
+<img src="docs/images/home-dark.png" width="230" alt="The same home screen in dark mode">
+
+</div>
+
+plasto gives every new app the parts that keep getting rebuilt: sign-in and roles,
+a database with an admin UI, push notifications, scheduled jobs, backups, Python
+workers and a one-command deploy. You add your own idea on top.
 
 It is built on [PocketBase](https://pocketbase.io) (Go, SQLite, auth, realtime,
 admin UI) and [Svelte 5](https://svelte.dev) with
@@ -61,6 +86,28 @@ email and password. Add more people there, in the `users` collection.
 - **An installable app.** It installs to a phone's home screen or a desktop, opens
   offline from its cached shell, and follows the system's light or dark mode.
 
+## How it fits together
+
+```mermaid
+flowchart LR
+  phone["Phone or laptop<br/>installable web app"]
+  subgraph box["Your NAS, Pi or server"]
+    app["Go app on PocketBase<br/>API, auth, realtime, admin UI"]
+    db[("SQLite and files<br/>pb_data/")]
+    jobs["Scheduled jobs<br/>and nightly backups"]
+    app --- db
+    app --- jobs
+  end
+  worker["Python workers<br/>ML, scraping, LLMs"]
+  phone -- "HTTPS over Tailscale" --> app
+  worker -- "records through the API" --> app
+  app -. "Web Push" .-> phone
+```
+
+Everything a person sees is the web app, served by the Go app. Heavy work runs in
+Python workers, here or on another machine, which write records; Go hooks react to
+those records and notify people.
+
 ## Deploy
 
 On any Linux machine with Docker (a NAS, a Raspberry Pi, a server):
@@ -89,7 +136,7 @@ web/                Svelte 5 + Tailwind web app
   public/           manifest, service worker and icons
 workers/            Python worker kit, your workers, their tests and image
 deploy/             compose files, Tailscale sidecar, install script, smoke test
-docs/               decisions and the deploy guide
+docs/               decisions, the deploy guide and the first-feature guide
 Dockerfile          the app's multi-arch image
 Makefile            run `make` to see every command
 ```
