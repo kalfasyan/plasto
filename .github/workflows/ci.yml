@@ -105,7 +105,7 @@ jobs:
       VERSION: ${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
     steps:
       - uses: actions/checkout@v7
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v4
 
       # Build both images for this runner and deploy them with the compose file.
       - name: Build the app for the smoke test
