@@ -109,6 +109,10 @@ Pushes to `main` publish `ghcr.io/kalfasyan/plasto` and
 `ghcr.io/kalfasyan/plasto-worker` for amd64, arm64 and armv7; a `v*` tag
 publishes that version.
 
+## Support
+
+If plasto saves you time, you can [buy me a coffee](https://buymeacoffee.com/kalfasyan).
+
 ## License
 
 MIT
