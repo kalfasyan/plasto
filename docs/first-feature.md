@@ -214,7 +214,7 @@ package app
 import (
 	"github.com/pocketbase/pocketbase/core"
 
-	"github.com/kalfasyan/plasto/push"
+	"github.com/selfhostit/plasto/push"
 )
 
 func registerTasks(app core.App) {
@@ -271,7 +271,7 @@ collection), and runs a job once at startup if the server was off when it was du
 	})
 ```
 
-with `"fmt"`, `"github.com/pocketbase/dbx"` and `"github.com/kalfasyan/plasto/jobs"`
+with `"fmt"`, `"github.com/pocketbase/dbx"` and `"github.com/selfhostit/plasto/jobs"`
 added to the imports.
 
 ## 5. A worker

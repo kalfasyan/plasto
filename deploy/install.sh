@@ -1,7 +1,7 @@
 #!/bin/sh
 # Installs or updates plasto on this machine with Docker Compose.
 #
-#   curl -fsSL https://raw.githubusercontent.com/kalfasyan/plasto/main/deploy/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/selfhostit/plasto/main/deploy/install.sh | sh
 #
 # or, from a clone, `sh deploy/install.sh [folder]`. It sets up a folder
 # (~/plasto by default) with the compose files and a .env, asks for a Tailscale
@@ -11,7 +11,7 @@
 set -eu
 
 app=plasto
-repo=${PLASTO_REPO:-kalfasyan/plasto}
+repo=${PLASTO_REPO:-selfhostit/plasto}
 source=${PLASTO_SOURCE:-https://raw.githubusercontent.com/$repo/main/deploy}
 dir=${1:-${PLASTO_DIR:-$HOME/$app}}
 files="docker-compose.yml docker-compose.tailscale.yml .env.example"

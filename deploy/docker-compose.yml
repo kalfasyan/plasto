@@ -4,7 +4,7 @@
 
 services:
   app:
-    image: ${PLASTO_IMAGE:-ghcr.io/kalfasyan/plasto:latest}
+    image: ${PLASTO_IMAGE:-ghcr.io/selfhostit/plasto:latest}
     restart: unless-stopped
     # Run as the owner of ./pb_data, so the data folder stays yours (and a NAS user's).
     user: ${PUID:-1000}:${PGID:-1000}
@@ -21,7 +21,7 @@ services:
   # Runs one of the workers in workers/, PLASTO_WORKER_SCRIPT (worker.py by default).
   # Enabled with COMPOSE_PROFILES=worker in .env.
   worker:
-    image: ${PLASTO_WORKER_IMAGE:-ghcr.io/kalfasyan/plasto-worker:latest}
+    image: ${PLASTO_WORKER_IMAGE:-ghcr.io/selfhostit/plasto-worker:latest}
     command: [python, "${PLASTO_WORKER_SCRIPT:-worker.py}"]
     profiles: [worker]
     restart: unless-stopped

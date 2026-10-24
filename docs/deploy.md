@@ -13,7 +13,7 @@ anything to the internet.
 ```
 
 Every push to `main` publishes two images for amd64, arm64 and armv7:
-`ghcr.io/kalfasyan/plasto` (the app) and `ghcr.io/kalfasyan/plasto-worker` (the
+`ghcr.io/selfhostit/plasto` (the app) and `ghcr.io/selfhostit/plasto-worker` (the
 Python workers). A tag like `v1.2.0` publishes `:v1.2.0` of both.
 
 ## Install
@@ -21,7 +21,7 @@ Python workers). A tag like `v1.2.0` publishes `:v1.2.0` of both.
 On the machine, as a user that can run `docker`:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/kalfasyan/plasto/main/deploy/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/selfhostit/plasto/main/deploy/install.sh | sh
 ```
 
 This creates `~/plasto` with the compose files, a `.env` and a `pb_data` folder
@@ -60,7 +60,7 @@ cd ~/plasto && docker compose pull && docker compose up -d
 
 Running the install script again does the same and also refreshes the compose
 files. To stay on a release, or go back to one, set `PLASTO_IMAGE` (and
-`PLASTO_WORKER_IMAGE`) in `.env` to a tag, like `ghcr.io/kalfasyan/plasto:v1.2.0`.
+`PLASTO_WORKER_IMAGE`) in `.env` to a tag, like `ghcr.io/selfhostit/plasto:v1.2.0`.
 Database migrations run on start, so take a backup before going back across one.
 
 ## Backups and restore
@@ -97,7 +97,7 @@ address:
 docker run -d --name worker --restart unless-stopped \
   -e PLASTO_URL=https://plasto.<your-tailnet>.ts.net \
   -e PLASTO_WORKER=camera -e PLASTO_WORKER_PASSWORD=... -e TZ=Europe/Athens \
-  ghcr.io/kalfasyan/plasto-worker python camera.py
+  ghcr.io/selfhostit/plasto-worker python camera.py
 ```
 
 ## Synology NAS
@@ -108,7 +108,7 @@ Needs DSM 7.2 or later with **Container Manager** installed.
    `ssh you@nas.local`.
 2. Install into a shared folder, with `sudo` because Docker on DSM needs it:
    ```sh
-   curl -fsSL https://raw.githubusercontent.com/kalfasyan/plasto/main/deploy/install.sh | sudo sh -s /volume1/docker/plasto
+   curl -fsSL https://raw.githubusercontent.com/selfhostit/plasto/main/deploy/install.sh | sudo sh -s /volume1/docker/plasto
    ```
    The data stays owned by your DSM user (`PUID` and `PGID` in `.env`), so you can
    see and back it up in File Station.

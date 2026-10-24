@@ -17,7 +17,7 @@ COPY backend/go.mod backend/go.sum ./
 RUN go mod download
 COPY backend/ ./
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH GOARM=${TARGETVARIANT#v} \
-    go build -trimpath -ldflags="-s -w -X github.com/kalfasyan/plasto/app.Version=$VERSION" -o /plasto .
+    go build -trimpath -ldflags="-s -w -X github.com/selfhostit/plasto/app.Version=$VERSION" -o /plasto .
 
 # --- runtime ---
 FROM alpine:3.24

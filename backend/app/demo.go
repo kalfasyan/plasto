@@ -8,7 +8,7 @@ import (
 
 	"github.com/pocketbase/pocketbase/core"
 
-	"github.com/kalfasyan/plasto/push"
+	"github.com/selfhostit/plasto/push"
 )
 
 // registerDemo records who added each item and tells everyone else about it.
