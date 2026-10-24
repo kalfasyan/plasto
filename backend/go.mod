@@ -1,4 +1,4 @@
-module github.com/kalfasyan/plasto
+module github.com/selfhostit/plasto
 
 go 1.27
 

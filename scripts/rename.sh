@@ -40,8 +40,8 @@ git grep -l -I -i -e plasto -- . ":(exclude)$self" ":(exclude)scripts/strip-demo
 		NAME=$name REPO=$repo IMAGE=$image PREFIX=$prefix perl -pi -e '
 			s/plasto_worker/\x01KIT\x01/g;            # the worker kit keeps its name
 			s/built on plasto/\x01BUILT\x01/g;
-			s{ghcr\.io/kalfasyan/plasto}{ghcr.io/$ENV{IMAGE}}g;
-			s{kalfasyan/plasto}{$ENV{REPO}}g;
+			s{ghcr\.io/selfhostit/plasto}{ghcr.io/$ENV{IMAGE}}g;
+			s{selfhostit/plasto}{$ENV{REPO}}g;
 			s/PLASTO_/$ENV{PREFIX}_/g;
 			s/plasto/$ENV{NAME}/g;
 			s/Plasto/\u$ENV{NAME}/g;
@@ -64,7 +64,7 @@ done
 
 # A fresh introduction for README.md and CLAUDE.md
 NAME=$name perl -0pi -e '
-	s{\A.*?(?=^## )}{# $ENV{NAME}\n\nA self-hosted app built on [plasto](https://github.com/kalfasyan/plasto).\n\n}ms
+	s{\A.*?(?=^## )}{# $ENV{NAME}\n\nA self-hosted app built on [plasto](https://github.com/selfhostit/plasto).\n\n}ms
 ' README.md
 NAME=$name perl -0pi -e '
 	s{^\Q$ENV{NAME}\E is a template for self-hosted apps:(.*?)\. Decisions and the build plan are in\n`docs/decisions.md`.\n}{$ENV{NAME} is a self-hosted app built on the plasto template:$1.\n}ms

@@ -95,7 +95,7 @@ func contact(app core.App) string {
 	if err == nil && owner.Email() != "" {
 		return "mailto:" + owner.Email()
 	}
-	return "https://github.com/kalfasyan/plasto"
+	return "https://github.com/selfhostit/plasto"
 }
 
 var client = &http.Client{Timeout: 15 * time.Second}

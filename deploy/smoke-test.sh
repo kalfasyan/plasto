@@ -28,8 +28,8 @@ step() { echo "--- $*"; }
 cp "$here/docker-compose.yml" "$dir/"
 mkdir "$dir/pb_data"
 cat >"$dir/.env" <<ENV
-PLASTO_IMAGE=${PLASTO_IMAGE:-ghcr.io/kalfasyan/plasto:latest}
-PLASTO_WORKER_IMAGE=${PLASTO_WORKER_IMAGE:-ghcr.io/kalfasyan/plasto-worker:latest}
+PLASTO_IMAGE=${PLASTO_IMAGE:-ghcr.io/selfhostit/plasto:latest}
+PLASTO_WORKER_IMAGE=${PLASTO_WORKER_IMAGE:-ghcr.io/selfhostit/plasto-worker:latest}
 PUID=$(id -u)
 PGID=$(id -g)
 PORT=$port

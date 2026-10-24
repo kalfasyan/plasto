@@ -9,8 +9,8 @@ import (
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 
-	"github.com/kalfasyan/plasto/app"
-	_ "github.com/kalfasyan/plasto/migrations"
+	"github.com/selfhostit/plasto/app"
+	_ "github.com/selfhostit/plasto/migrations"
 )
 
 func main() {

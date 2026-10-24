@@ -8,8 +8,8 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tests"
 
-	"github.com/kalfasyan/plasto/app"
-	_ "github.com/kalfasyan/plasto/migrations"
+	"github.com/selfhostit/plasto/app"
+	_ "github.com/selfhostit/plasto/migrations"
 )
 
 // newApp starts an empty app with the plasto migrations and routes.
